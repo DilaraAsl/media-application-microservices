@@ -2,6 +2,7 @@ package com.tsg.service.impl;
 
 import com.tsg.dto.UserDto;
 import com.tsg.entity.User;
+import com.tsg.exceptions.UserNotFoundException;
 import com.tsg.repository.UserRepository;
 import com.tsg.service.UserService;
 import com.tsg.util.MapperUtil;
@@ -36,7 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUser(int id) {
-       Optional<User> user= userRepository.findById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
+
+
         return mapperUtil.convert(user,new UserDto());
     }
 }

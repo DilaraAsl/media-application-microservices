@@ -4,7 +4,9 @@ import com.tsg.dto.UserDto;
 import com.tsg.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,16 +19,24 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserDto>> listAllUsers(){
+    public ResponseEntity<List<UserDto>> listAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
+
     @PostMapping()
-    public void saveUser(@RequestBody UserDto userDto){
-        userService.save(userDto);
+    public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto) {
+        UserDto savedUser = userService.save(userDto);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")  // append id variable
+                .buildAndExpand(savedUser.getId())  // replace it with id
+                .toUri();
+        return ResponseEntity.created(location).build();
 
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findByUserId(@PathVariable("id") Integer id){
+    public ResponseEntity<UserDto> findByUserId(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(userService.findUser(id));
     }
 }
