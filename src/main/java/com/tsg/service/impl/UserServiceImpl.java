@@ -24,15 +24,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll() {
-        return userRepository.findAll().stream().map(user->mapperUtil.convert(user,new UserDto())).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(user -> mapperUtil.convert(user, new UserDto())).collect(Collectors.toList());
 
     }
 
     @Override
     public UserDto save(UserDto userDto) {
-
-         userRepository.save(mapperUtil.convert(userDto,new User()));
-         return userDto;
+        User user = mapperUtil.convert(userDto, new User());
+        user.setDeleted(false);
+        userRepository.save(user);
+        return userDto;
     }
 
     @Override
@@ -40,6 +41,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
 
 
-        return mapperUtil.convert(user,new UserDto());
+        return mapperUtil.convert(user, new UserDto());
+    }
+
+    @Override
+    public UserDto delete(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setDeleted(true);
+        userRepository.save(user);
+        return findUser(id);
     }
 }

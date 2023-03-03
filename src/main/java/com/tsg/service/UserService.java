@@ -11,4 +11,5 @@ public interface UserService {
     public UserDto save(UserDto userDto);
 
     public UserDto findUser(int id);
+    public UserDto delete(Integer id);
 }
