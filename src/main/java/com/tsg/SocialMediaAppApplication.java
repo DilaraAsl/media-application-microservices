@@ -18,10 +18,10 @@ public class SocialMediaAppApplication {
     ModelMapper modelMapper() {
         return new ModelMapper();
     }
-
-    @Bean
-    Validator validator() {
-        return new LocalValidatorFactoryBean();
-    }
+// when  we add validation api dependency with Hibernate we don't need to create the validator bean
+//    @Bean
+//    Validator validator() {
+//        return new LocalValidatorFactoryBean();
+//    }
 
 }

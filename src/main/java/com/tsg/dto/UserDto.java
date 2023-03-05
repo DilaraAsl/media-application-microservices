@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.*;
+
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 @Getter
 @Setter
